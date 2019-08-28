@@ -1,0 +1,24 @@
+import requests
+from bs4 import BeautifulSoup
+
+# some urls (testing)
+# "https://www.blocket.se/stockholm?q=mc&cg=1000&w=1&st=s&c=&ca=11&l=0&md=th&o="
+# "https://www.blocket.se/stockholm/datorer_tv-spel?q=dator&w=1&st=s&ca=11&l=0&md=th&cg=5020&st=s&o=2"
+
+
+def trade_spider(max_pages, seek):
+    page = 1
+    while page <= max_pages:
+        if page < 1:
+            url = seek + str(page)
+        else:
+            url = seek
+        source_code = requests.get(url)
+        plain_text = source_code.text
+        soup = BeautifulSoup(plain_text, "html.parser")
+        for link in soup.findAll('a', {'class': 'item-link'}):
+            href = link.get('href')
+            print(href)
+        page += 1
+
+trade_spider(10, "https://www.blocket.se/stockholm?q=28+tum&cg=6060&w=1&st=s&c=&ca=11&is=1&l=0&md=th")
