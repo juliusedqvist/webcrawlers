@@ -1,0 +1,57 @@
+import requests
+from bs4 import BeautifulSoup
+import bs4
+
+def get_synonym(url):
+
+    if len(items) < 3:
+        return items
+
+    source_code = requests.get(url)
+    plain_text = source_code.text
+
+    soup = BeautifulSoup(plain_text, "html.parser")
+
+    result = soup.find_all("a", {"data-linkid": "nn1ov4"})
+    #print(len(result))
+
+
+
+    try:
+        stringholderone = str(result[1])
+    except IndexError:
+        return items
+
+    listholderone = stringholderone.split()
+    stringholdertwo = str(listholderone[-1]).strip('href="/browse/').strip('</a>')
+
+    listholdertwo = list(stringholdertwo)
+    #print(listholdertwo)
+    #print(result)
+    #print(stringholderone)
+
+    listholderthree = stringholdertwo.split('>')
+    stringholderthree = listholderthree[-1]
+    #print(stringholderthree)
+    if len(stringholderthree) < 4:
+        return items
+    return stringholderthree
+
+
+#get_synonym("https://www.thesaurus.com/browse/" + input("what "))
+
+
+paragraph = input("Type your text here: ")
+
+parlist = paragraph.split()
+
+x = 0
+wurl = "https://www.thesaurus.com/browse/"
+finallist = []
+
+
+for items in parlist:
+    finallist.append(get_synonym(wurl + items))
+    #get_synonym(wurl + items)
+
+print(*finallist)
